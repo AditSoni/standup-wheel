@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Standup Picker Wheel",
+  "version": "1.0",
+  "description": "Spin a wheel to pick a name randomly with sound and animations.",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "content_scripts": [],
+  "web_accessible_resources": [
+    {
+      "resources": ["tick.mp3"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

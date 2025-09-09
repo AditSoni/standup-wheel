@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Standup Picker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Standup Picker 🎯</h2>
+    <textarea id="nameInput" placeholder="Enter names (1 per line)"></textarea>
+    
+    <button id="startBtn">Start</button>
+<div class="wheel-container">
+  <canvas id="wheelCanvas" width="400" height="400"></canvas>
+</div>
+<button id="spinBtn">🎲 Spin Now</button>
+<button id="resetBtn">🔄 Reset</button>
+  </div>
+
+  <script src="wheel.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
