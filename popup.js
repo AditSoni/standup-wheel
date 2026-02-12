@@ -23,8 +23,6 @@ document.getElementById('startBtn').onclick = () => {
 
 document.getElementById('spinBtn').onclick = () => {
   if (remaining.length <= 1 || spinning) return;
-  // shuffle reamaining names to ensure randomness
-  remaining = [...remaining].sort(() => Math.random() - 0.5);
   spinWheel(remaining, picked => {
     alert(`✅ ${picked} was picked!`);
     remaining = remaining.filter(name => name !== picked);

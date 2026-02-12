@@ -101,9 +101,25 @@ function spinWheel(labels, onFinish) {
 
   spinning = true;
   const now = performance.now();
-  const totalRotations = 6;
-  const randomOffset = Math.random() * 2 * Math.PI;
-  const totalAngle = totalRotations * 2 * Math.PI + randomOffset;
+
+  // Normalize startAngle to [0, 2π) to prevent accumulation bias
+  startAngle = startAngle % (2 * Math.PI);
+
+  // Pick a truly random target segment (by index), then calculate
+  // the exact angle needed to land on it
+  const targetSegmentIndex = Math.floor(Math.random() * labels.length);
+  // Add a random offset within the segment so we don't always land on edges
+  const segmentInternalOffset = (Math.random() * 0.6 + 0.2) * anglePerSegment;
+
+  // The pointer is at 3π/2 (top). To land on the target segment, we need
+  // the segment's start angle + offset to align with 3π/2.
+  const targetAngle = (2 * Math.PI) - (anglePerSegment * targetSegmentIndex + segmentInternalOffset) + (3 * Math.PI / 2);
+
+  // Add 5-8 full rotations for visual effect
+  const totalRotations = 5 + Math.floor(Math.random() * 4);
+  const totalAngle = totalRotations * 2 * Math.PI + ((targetAngle - startAngle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+
+  const initialAngle = startAngle;
   let lastTickIndex = -1;
 
   // Play full tick.mp3 to match 5s
@@ -118,12 +134,11 @@ function spinWheel(labels, onFinish) {
     const elapsed = currentTime - now;
     const progress = Math.min(elapsed / duration, 1);
     const easedProgress = easeOut(progress);
-    const currentAngle = easedProgress * totalAngle;
 
-    startAngle = currentAngle;
+    startAngle = initialAngle + easedProgress * totalAngle;
 
     // Determine tick based on segment passed
-    const tickIndex = Math.floor(currentAngle / anglePerSegment);
+    const tickIndex = Math.floor((startAngle - initialAngle) / anglePerSegment);
     if (tickIndex !== lastTickIndex) {
       lastTickIndex = tickIndex;
       // Optional per-tick effect could go here
@@ -135,6 +150,9 @@ function spinWheel(labels, onFinish) {
     } else {
       tickAudio.pause();
       tickAudio.currentTime = 0;
+
+      // Normalize final startAngle to avoid accumulation
+      startAngle = startAngle % (2 * Math.PI);
 
       // Optional winning visual (confetti)
       if (typeof confetti === 'function') {
